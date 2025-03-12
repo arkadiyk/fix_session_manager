@@ -1,4 +1,4 @@
-# Fix Session Manager
+# FIX Session Manager
  
 * **Sequence Number Management:** Tracking incoming and outgoing messages, detecting gaps, and requesting resends.
 * **Heartbeat & Connection Monitoring:** Maintaining connectivity and quickly detecting issues.
