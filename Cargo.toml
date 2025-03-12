@@ -1,0 +1,16 @@
+[package]
+name = "fix_session_manager"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { version = "1.36", features = ["full"] }  # Async runtime
+bytes = "1.5"                                      # Working with bytes efficiently
+chrono = "0.4"                                     # Time handling
+thiserror = "1.0"                                  # Error handling
+tracing = "0.1"                                    # Logging and tracing
+tracing-subscriber = "0.3"                         # Logging setup
+dashmap = "5.5"                                    # Thread-safe hashmap
+async-trait = "0.1"                                # Async traits support
+futures = "0.3"                                    # Future utilities
+uuid = { version = "1.7", features = ["v4"] }      # UUID generation
