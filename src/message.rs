@@ -83,15 +83,12 @@ impl FixMessage {
     pub fn to_bytes(&self, begin_string: &str, sender_comp_id: &str, target_comp_id: &str, seq_num: u64) -> BytesMut {
         let mut body = BytesMut::new();
         
-        // Start with message type
         add_field(&mut body, tags::MSG_TYPE, &self.msg_type);
         
-        // Add sequence number unless it's already set
         if !self.fields.contains_key(&tags::MSG_SEQ_NUM) {
             add_field(&mut body, tags::MSG_SEQ_NUM, &seq_num.to_string());
         }
         
-        // Add sender and target if not set
         if !self.fields.contains_key(&tags::SENDER_COMP_ID) {
             add_field(&mut body, tags::SENDER_COMP_ID, sender_comp_id);
         }
@@ -100,15 +97,12 @@ impl FixMessage {
             add_field(&mut body, tags::TARGET_COMP_ID, target_comp_id);
         }
         
-        // Add sending time if not set
         if !self.fields.contains_key(&tags::SENDING_TIME) {
             let now: DateTime<Utc> = Utc::now();
             add_field(&mut body, tags::SENDING_TIME, &now.format("%Y%m%d-%H:%M:%S.%3f").to_string());
         }
         
-        // Add all other fields
         for (tag, value) in &self.fields {
-            // Skip fields we've already processed
             if *tag == tags::MSG_TYPE || *tag == tags::MSG_SEQ_NUM || 
                *tag == tags::SENDER_COMP_ID || *tag == tags::TARGET_COMP_ID || 
                *tag == tags::SENDING_TIME {
@@ -118,17 +112,11 @@ impl FixMessage {
             add_field(&mut body, *tag, value);
         }
         
-        // Now assemble the full message
         let mut message = BytesMut::new();
-        
-        // Add header fields
         add_field(&mut message, tags::BEGIN_STRING, begin_string);
         add_field(&mut message, tags::BODY_LENGTH, &body.len().to_string());
-        
-        // Add body
         message.put(body);
         
-        // Calculate checksum
         let checksum: u32 = message.iter().map(|&b| u32::from(b)).sum::<u32>() % 256;
         add_field(&mut message, tags::CHECK_SUM, &format!("{:03}", checksum));
         
@@ -159,7 +147,6 @@ impl FixMessage {
             
             let value = parts[1].to_string();
             
-            // Store the message type separately
             if tag == tags::MSG_TYPE {
                 msg_type = value.clone();
             }

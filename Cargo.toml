@@ -3,6 +3,10 @@ name = "fix_session_manager"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+name = "fix_session_manager"
+path = "src/lib.rs"
+
 [dependencies]
 tokio = { version = "1.36", features = ["full"] }  # Async runtime
 bytes = "1.5"                                      # Working with bytes efficiently
