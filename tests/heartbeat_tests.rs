@@ -40,8 +40,8 @@ async fn test_test_request() {
     // Mark message as received
     heartbeat.message_received().await;
     
-    // Wait until test request threshold
-    tokio::time::sleep(Duration::from_millis(250)).await;
+    // Wait until test request threshold (3 heartbeat intervals = 300ms)
+    tokio::time::sleep(Duration::from_millis(350)).await;
     
     // Should need to send test request
     assert!(heartbeat.should_send_test_request().await);
@@ -53,8 +53,8 @@ async fn test_test_request() {
     // No timeout yet
     assert!(!heartbeat.check_test_request_timeout().await);
     
-    // Wait for test request timeout
-    tokio::time::sleep(Duration::from_millis(150)).await;
+    // Wait for test request timeout (1.5 * heartbeat interval = 150ms)
+    tokio::time::sleep(Duration::from_millis(200)).await;
     
     // Should timeout
     assert!(heartbeat.check_test_request_timeout().await);
